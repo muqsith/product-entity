@@ -3,7 +3,7 @@ export interface AppConfig {
 }
 
 const config: AppConfig = {
-  dbConnectionString: "postgresql://admin:admin@localhost:5432/products",
+  dbConnectionString: "postgresql://product_dev:123456@localhost:5432/product_entity",
 };
 
 export const getConfig = (): AppConfig => {

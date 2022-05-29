@@ -1,14 +1,16 @@
 import { normalizeInput } from "../../utils";
-export class Category {
+export class ProductImage {
   id: string;
-  parentId: string;
-  name: string;
+  productId: string;
+  url: string;
+  main: boolean;
   archived: boolean;
   constructor(data: Record<string, any>) {
     const normalizedData = normalizeInput(data);
     this.id = normalizedData.id;
-    this.parentId = normalizedData.parentid;
-    this.name = normalizedData.name;
+    this.productId = normalizedData.productid;
+    this.url = normalizedData.url;
+    this.main = normalizedData.main;
     this.archived = normalizedData.archived;
   }
 }

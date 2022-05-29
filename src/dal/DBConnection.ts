@@ -35,7 +35,7 @@ export class DBConnection {
     return await this.pool.connect();
   }
 
-  async executeQuery(query: SQLQuery) {
+  async executeQuery(query: SQLQuery): Promise<QueryResult> {
     let queryError = null;
     let queryResult = null;
     const dbClient = await this.getNewClient();
@@ -92,5 +92,9 @@ export class DBConnection {
       throw txnError;
     }
     return txnResults;
+  }
+
+  async close() {
+    this.pool.end();
   }
 }
