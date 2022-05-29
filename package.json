@@ -1,0 +1,26 @@
+{
+  "name": "product-entity",
+  "version": "1.0.0",
+  "description": "REST/GQL API for Product entity",
+  "main": "./dist/index.js",
+  "types": "./src/index.d.ts",
+  "scripts": {
+    "test": "npm run test-setup; jest",
+    "development-setup": "node scripts/db.js -u product_dev -p 123456 -d product_entity -c postgresql://admin:admin@localhost:5432",
+    "test-setup": "node scripts/db.js -u product_test -p 123456 -d test_product_entity -c postgresql://admin:admin@localhost:5432"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.1",
+    "@types/jest": "^27.5.1",
+    "@types/pg": "^8.6.5",
+    "commander": "^9.3.0",
+    "fs-extra": "^10.1.0",
+    "jest": "^28.1.0",
+    "ts-jest": "^28.0.3"
+  }
+}
