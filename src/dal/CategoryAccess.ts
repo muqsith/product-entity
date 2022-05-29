@@ -1,6 +1,6 @@
 import { Logger } from "../logger";
 import { DBConnection } from "./DBConnection";
-import { Category } from "./models/Category";
+import { Category } from "../entities/Category";
 
 export class CategoryAccess {
   dbConnection: DBConnection;

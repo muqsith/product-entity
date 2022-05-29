@@ -1,4 +1,5 @@
-import { normalizeInput } from "../../utils";
+import { normalizeInput } from "../utils";
+
 export class ProductImage {
   id: string;
   productId: string;

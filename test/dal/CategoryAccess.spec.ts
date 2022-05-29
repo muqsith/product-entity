@@ -1,6 +1,6 @@
 import { AppConfig, getConfig } from "../config/index";
 import { DAL } from "../../src/dal/index";
-import { Category } from "../../src/dal/models/Category";
+import { Category } from "../../src/entities/Category";
 
 describe("CategoryAccess -", () => {
   let dal: DAL = null;

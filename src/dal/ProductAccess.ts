@@ -1,6 +1,6 @@
 import { Logger } from "../logger";
 import { DBConnection } from "./DBConnection";
-import { Product } from "./models/Product";
+import { Product } from "../entities/Product";
 
 export class ProductAccess {
   dbConnection: DBConnection;

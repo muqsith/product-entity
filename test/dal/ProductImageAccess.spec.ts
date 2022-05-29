@@ -1,8 +1,8 @@
 import { AppConfig, getConfig } from "../config/index";
 import { DAL } from "../../src/dal/index";
-import { ProductImage } from "../../src/dal/models/ProductImage";
-import { Product } from "../../src/dal/models/Product";
-import { Category } from "../../src/dal/models/Category";
+import { ProductImage } from "../../src/entities/ProductImage";
+import { Product } from "../../src/entities/Product";
+import { Category } from "../../src/entities/Category";
 import { STATUSES } from "../../src/constants/Product";
 
 describe("ProductImageAccess -", () => {
