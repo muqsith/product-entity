@@ -54,4 +54,24 @@ describe("CategoryAccess -", () => {
     const categories = await dal.categoryAccess.getCategories();
     expect(categories.length > 0).toBeTruthy();
   });
+
+  it("should get categories by parent id", async () => {
+    const parentCategory = await dal.categoryAccess.addCategory(
+      new Category({
+        parentId: null,
+        name: "Prent category - 5002",
+      })
+    );
+    for (let i = 0; i < 3; i += 1) {
+      const newCategory = new Category({
+        parentId: parentCategory.id,
+        name: "Category - 200" + i,
+      });
+      await dal.categoryAccess.addCategory(newCategory);
+    }
+    const childCategories = await dal.categoryAccess.getCategoriesByParentId(
+      parentCategory.id
+    );
+    expect(childCategories.length === 3).toBeTruthy();
+  });
 });

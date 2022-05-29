@@ -22,13 +22,14 @@ describe("ProductImageAccess -", () => {
         name: "Category - c1",
       })
     );
-    const product = await dal.productAccess.addProduct(
+    const products = await dal.productAccess.addProducts([
       new Product({
         name: "Product - 1",
         categoryId: category.id,
         status: STATUSES.DRAFT,
-      })
-    );
+      }),
+    ]);
+    const product = products[0];
     const newProductImages = [];
     for (let i = 0; i < 5; i += 1) {
       const newProductImage = new ProductImage({
@@ -55,13 +56,14 @@ describe("ProductImageAccess -", () => {
         name: "Category - c2",
       })
     );
-    const product = await dal.productAccess.addProduct(
+    const products = await dal.productAccess.addProducts([
       new Product({
         name: "Product - 2",
         categoryId: category.id,
         status: STATUSES.DRAFT,
-      })
-    );
+      }),
+    ]);
+    const product = products[0];
     const newProductImage = new ProductImage({
       url: "http://example.com/image-1002.png",
       productId: product.id,
@@ -86,13 +88,14 @@ describe("ProductImageAccess -", () => {
         name: "Category - c3",
       })
     );
-    const product = await dal.productAccess.addProduct(
+    const products = await dal.productAccess.addProducts([
       new Product({
         name: "Product - 3001",
         categoryId: category.id,
         status: STATUSES.DRAFT,
-      })
-    );
+      }),
+    ]);
+    const product = products[0];
     const newProductImages = [];
     for (let i = 0; i < 5; i += 1) {
       const newProductImage = new ProductImage({

@@ -1,13 +1,13 @@
 import { normalizeInput } from "../utils";
 import { ProductTransitionError } from "../errors/ProductTransitionError";
-import { STATUSES, TRANSITIONS } from "../constants/Product";
+import { TRANSITIONS } from "../constants/Product";
 
 export class Product {
   // properties
   id: string;
   name: string;
   price: number;
-  description: string;
+  description?: string;
   categoryId: string;
   status: string;
 
@@ -21,7 +21,7 @@ export class Product {
     this.status = normalizedData.status;
   }
 
-  isTransitionAllowed(toStatus): boolean {
+  isStatusTransitionAllowed(toStatus): boolean {
     let result = false;
     const availableToStatuses = TRANSITIONS.filter(
       (transition) => transition.from === this.status
@@ -30,44 +30,21 @@ export class Product {
     return result;
   }
 
-  setStatusTo(toStatus) {
-    const transitionAllowed = this.isTransitionAllowed(toStatus);
-    if (!transitionAllowed) {
-      throw new ProductTransitionError(this.status, toStatus);
+  transformStatus(toStatus) {
+    const isTransitionAllowed = this.isStatusTransitionAllowed(toStatus);
+    if (!isTransitionAllowed) {
+      throw new ProductTransitionError(
+        this.id,
+        this.name,
+        this.status,
+        toStatus
+      );
     } else {
       this.status = toStatus;
     }
   }
 
-  setStatusAvailable() {
-    this.setStatusTo(STATUSES.AVAILABLE);
-  }
-
-  setStatusDraftDeleted() {
-    this.setStatusTo(STATUSES.DRAFT_DELETED);
-  }
-
-  setStatusExpired() {
-    this.setStatusTo(STATUSES.EXPIRED);
-  }
-
-  setStatusDeleted() {
-    this.setStatusTo(STATUSES.DELETED);
-  }
-
-  setStatusReserved() {
-    this.setStatusTo(STATUSES.RESERVED);
-  }
-
-  setStatusSold() {
-    this.setStatusTo(STATUSES.SOLD);
-  }
-
-  setStatusReturned() {
-    this.setStatusTo(STATUSES.RETURNED);
-  }
-
-  setStatusDraft() {
-    this.setStatusTo(STATUSES.DRAFT);
+  setStatus(newStatus) {
+    this.transformStatus(newStatus);
   }
 }

@@ -23,6 +23,19 @@ export class CategoryAccess {
     return result;
   }
 
+  async getCategoriesByParentId(parentId: string): Promise<Array<Category>> {
+    let result = [];
+    const selectQuery = {
+      text: "SELECT * FROM categories WHERE parentid = $1",
+      values: [parentId],
+    };
+    const queryResult = await this.dbConnection.executeQuery(selectQuery);
+    if (queryResult.rowCount > 0) {
+      result = queryResult.rows.map((row) => new Category(row));
+    }
+    return result;
+  }
+
   async getCategory(categoryId: string): Promise<Category> {
     let result = null;
     const selectQuery = {

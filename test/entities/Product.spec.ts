@@ -13,7 +13,7 @@ describe("Product entity -", () => {
       categoryId,
       status: STATUSES.DRAFT,
     });
-    product.setStatusAvailable();
+    product.setStatus(STATUSES.AVAILABLE);
     expect(product.status).toBe(STATUSES.AVAILABLE);
   });
 
@@ -26,8 +26,8 @@ describe("Product entity -", () => {
       categoryId,
       status: STATUSES.DRAFT,
     });
-    product.setStatusAvailable();
-    product.setStatusReserved();
+    product.setStatus(STATUSES.AVAILABLE);
+    product.setStatus(STATUSES.RESERVED);
     expect(product.status).toBe(STATUSES.RESERVED);
   });
 
@@ -41,7 +41,7 @@ describe("Product entity -", () => {
       status: STATUSES.DRAFT,
     });
     try {
-      product.setStatusSold();
+      product.setStatus(STATUSES.SOLD);
     } catch (err) {
       expect(err).toBeInstanceOf(ProductTransitionError);
     }
