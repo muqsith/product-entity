@@ -62,13 +62,13 @@ export class CategoryAccess {
     return result;
   }
 
-  async deleteCategory(categoryId: string) {
+  async updateStatus(categoryId: string, status: string) {
     let result = null;
-    const archiveQuery = {
-      text: "UPDATE categories SET archived = $2 WHERE id = $1 RETURNING *",
-      values: [categoryId, true],
+    const updateStatusQuery = {
+      text: "UPDATE categories SET status = $2 WHERE id = $1 RETURNING *",
+      values: [categoryId, status],
     };
-    const queryResult = await this.dbConnection.executeQuery(archiveQuery);
+    const queryResult = await this.dbConnection.executeQuery(updateStatusQuery);
     if (queryResult.rowCount > 0) {
       result = new Category(queryResult.rows[0]);
     }

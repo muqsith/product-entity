@@ -2,7 +2,7 @@ CREATE TABLE categories (
     id uuid DEFAULT uuid_generate_v4 (),
     parentid uuid, -- null for a root category
     name VARCHAR NOT NULL,
-    archived BOOLEAN DEFAULT FALSE,
+    status VARCHAR DEFAULT 'ACTIVE',
     PRIMARY KEY (id)
 );
 
@@ -12,7 +12,7 @@ CREATE TABLE products (
     price NUMERIC(5, 2),
     description VARCHAR,
     categoryid uuid NOT NULL,
-    archived BOOLEAN DEFAULT FALSE,
+    status VARCHAR NOT NULL,
     FOREIGN KEY (categoryid) REFERENCES categories (id),
     PRIMARY KEY (id)
 );
@@ -26,3 +26,4 @@ CREATE TABLE product_images (
     FOREIGN KEY (productid) REFERENCES products (id),
     PRIMARY KEY (id)
 );
+

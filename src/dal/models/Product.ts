@@ -6,7 +6,7 @@ export class Product {
   price: number;
   description: string;
   categoryId: string;
-  archived: boolean;
+  status: string;
   constructor(data: Record<string, any>) {
     const normalizedData = normalizeInput(data);
     this.id = normalizedData.id;
@@ -14,6 +14,6 @@ export class Product {
     this.price = normalizedData.price;
     this.description = normalizedData.description;
     this.categoryId = normalizedData.categoryid;
-    this.archived = normalizedData.archived;
+    this.status = normalizedData.status;
   }
 }

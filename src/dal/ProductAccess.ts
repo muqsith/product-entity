@@ -39,12 +39,15 @@ export class ProductAccess {
   async addProduct(newProduct: Product): Promise<Product> {
     let result = null;
     const insertQuery = {
-      text: "INSERT INTO products (name, price, description, categoryid) VALUES ($1, $2, $3, $4) RETURNING *",
+      text:
+        "INSERT INTO products (name, price, description, categoryid, status)" +
+        " VALUES ($1, $2, $3, $4, $5) RETURNING *",
       values: [
         newProduct.name,
         newProduct.price,
         newProduct.description,
         newProduct.categoryId,
+        newProduct.status,
       ],
     };
     const queryResult = await this.dbConnection.executeQuery(insertQuery);
@@ -57,13 +60,17 @@ export class ProductAccess {
   async updateProduct(product: Product): Promise<Product> {
     let result = null;
     const updateQuery = {
-      text: "UPDATE products SET name = $2, price = $3, description = $4, categoryid = $5 WHERE id = $1 RETURNING *",
+      text:
+        "UPDATE products " +
+        "SET name = $2, price = $3, description = $4, categoryid = $5, status = $6 " +
+        "WHERE id = $1 RETURNING *",
       values: [
         product.id,
         product.name,
         product.price,
         product.description,
         product.categoryId,
+        product.status,
       ],
     };
     const queryResult = await this.dbConnection.executeQuery(updateQuery);
@@ -73,13 +80,13 @@ export class ProductAccess {
     return result;
   }
 
-  async deleteProduct(productId: string): Promise<Product> {
+  async updateStatus(productId: string, status: string): Promise<Product> {
     let result = null;
-    const archiveQuery = {
-      text: "UPDATE products SET archived = $2 WHERE id = $1 RETURNING *",
-      values: [productId, true],
+    const updateStatusQuery = {
+      text: "UPDATE products SET status = $2 WHERE id = $1 RETURNING *",
+      values: [productId, status],
     };
-    const queryResult = await this.dbConnection.executeQuery(archiveQuery);
+    const queryResult = await this.dbConnection.executeQuery(updateStatusQuery);
     if (queryResult.rowCount > 0) {
       result = new Product(queryResult.rows[0]);
     }

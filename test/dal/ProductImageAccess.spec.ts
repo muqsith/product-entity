@@ -3,6 +3,7 @@ import { DAL } from "../../src/dal/index";
 import { ProductImage } from "../../src/dal/models/ProductImage";
 import { Product } from "../../src/dal/models/Product";
 import { Category } from "../../src/dal/models/Category";
+import { STATUSES } from "../../src/constants/Product";
 
 describe("ProductImageAccess -", () => {
   let dal: DAL = null;
@@ -25,6 +26,7 @@ describe("ProductImageAccess -", () => {
       new Product({
         name: "Product - 1",
         categoryId: category.id,
+        status: STATUSES.DRAFT,
       })
     );
     const newProductImages = [];
@@ -57,6 +59,7 @@ describe("ProductImageAccess -", () => {
       new Product({
         name: "Product - 2",
         categoryId: category.id,
+        status: STATUSES.DRAFT,
       })
     );
     const newProductImage = new ProductImage({
@@ -87,6 +90,7 @@ describe("ProductImageAccess -", () => {
       new Product({
         name: "Product - 3001",
         categoryId: category.id,
+        status: STATUSES.DRAFT,
       })
     );
     const newProductImages = [];
