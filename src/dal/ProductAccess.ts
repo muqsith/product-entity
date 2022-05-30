@@ -49,7 +49,31 @@ export class ProductAccess {
     return result;
   }
 
-  async addProducts(newProducts: Array<Product>): Promise<Product> {
+  async addProduct(newProduct: Product): Promise<Product> {
+    let result = null;
+    const insertQuery = {
+      text:
+        "INSERT INTO products (name, price, description, categoryid, status)" +
+        " VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      values: [
+        newProduct.name,
+        newProduct.price,
+        newProduct.description,
+        newProduct.categoryId,
+        newProduct.status,
+      ],
+    };
+
+    const queryResult = await this.dbConnection.executeQuery(insertQuery);
+
+    if (queryResult.rowCount > 0) {
+      result = new Product(queryResult.rows[0]);
+    }
+
+    return result;
+  }
+
+  async addProducts(newProducts: Array<Product>): Promise<Array<Product>> {
     let result = null;
     const queries = [];
     for (const newProduct of newProducts) {
@@ -81,7 +105,32 @@ export class ProductAccess {
     return result;
   }
 
-  async updateProducts(products: Array<Product>): Promise<Product> {
+  async updateProduct(product: Product): Promise<Product> {
+    let result = null;
+    const updateQuery = {
+      text:
+        "UPDATE products " +
+        "SET name = $2, price = $3, description = $4, categoryid = $5, status = $6 " +
+        "WHERE id = $1 RETURNING *",
+      values: [
+        product.id,
+        product.name,
+        product.price,
+        product.description,
+        product.categoryId,
+        product.status,
+      ],
+    };
+    const queryResult = await this.dbConnection.executeQuery(updateQuery);
+
+    if (queryResult.rowCount > 0) {
+      result = new Product(queryResult.rows[0]);
+    }
+
+    return result;
+  }
+
+  async updateProducts(products: Array<Product>): Promise<Array<Product>> {
     let result = null;
     const queries = [];
     for (const product of products) {
@@ -117,7 +166,7 @@ export class ProductAccess {
   async updateProductsStatus(
     productIds: Array<string>,
     status: string
-  ): Promise<Product> {
+  ): Promise<Array<Product>> {
     let result = null;
     const queries = [];
     for (const productId of productIds) {

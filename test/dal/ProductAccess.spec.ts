@@ -1,4 +1,4 @@
-import { AppConfig, getConfig } from "../config/index";
+import { AppConfig, getConfig } from "../../src/config/index";
 import { DAL } from "../../src/dal/index";
 import { Product } from "../../src/entities/Product";
 import { Category } from "../../src/entities/Category";
@@ -8,7 +8,7 @@ describe("ProductAccess -", () => {
   let dal: DAL = null;
   let config: AppConfig = null;
   beforeAll(() => {
-    config = getConfig();
+    config = getConfig(process.env.NODE_ENV);
     dal = new DAL(config, console);
   });
   afterAll(async () => {
@@ -28,8 +28,7 @@ describe("ProductAccess -", () => {
       categoryId: category.id,
       status: STATUSES.DRAFT,
     });
-    const savedProducts = await dal.productAccess.addProducts([newProduct]);
-    const savedProduct = savedProducts[0];
+    const savedProduct = await dal.productAccess.addProduct(newProduct);
     expect(savedProduct.id).toBeTruthy();
   });
 
@@ -52,13 +51,11 @@ describe("ProductAccess -", () => {
       categoryId: category1.id,
       status: STATUSES.DRAFT,
     });
-    const products = await dal.productAccess.addProducts([newProduct]);
-    const product = products[0];
+    const product = await dal.productAccess.addProduct(newProduct);
     product.categoryId = category2.id;
     const updatedName = "Product - 2002";
     product.name = updatedName;
-    const updatedProducts = await dal.productAccess.updateProducts([product]);
-    const updatedProduct = updatedProducts[0];
+    const updatedProduct = await dal.productAccess.updateProduct(product);
     expect(updatedProduct.categoryId).toBe(category2.id);
     expect(updatedProduct.name).toBe(updatedName);
   });

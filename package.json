@@ -5,8 +5,8 @@
   "main": "./dist/index.js",
   "types": "./src/index.d.ts",
   "scripts": {
-    "test": "export ENV=test && npm run test-setup; jest",
-    "start": "export ENV=development && npm run development-setup && npm run server-build && node dist/server.js",
+    "test": "export NODE_ENV=test && npm run test-setup; jest",
+    "start": "export NODE_ENV=development && npm run development-setup && npm run server-build && node dist/server.js",
     "server-build": "./node_modules/.bin/rimraf dist && npm run tsc;",
     "tsc": "./node_modules/.bin/tsc",
     "development-setup": "node scripts/db.js -u product_dev -p 123456 -d product_entity -c postgresql://admin:admin@localhost:5432",
@@ -16,6 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.1",
+    "http-errors": "^2.0.0",
+    "joi": "^17.6.0",
     "pg": "^8.7.3",
     "uuid": "^8.3.2"
   },
@@ -24,7 +26,9 @@
     "@babel/preset-typescript": "^7.17.12",
     "@tsconfig/node14": "^1.0.1",
     "@types/express": "^4.17.13",
+    "@types/http-errors": "^1.8.2",
     "@types/jest": "^27.5.1",
+    "@types/joi": "^17.2.3",
     "@types/pg": "^8.6.5",
     "@types/uuid": "^8.3.4",
     "commander": "^9.3.0",

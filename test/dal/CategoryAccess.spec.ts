@@ -1,4 +1,4 @@
-import { AppConfig, getConfig } from "../config/index";
+import { AppConfig, getConfig } from "../../src/config/index";
 import { DAL } from "../../src/dal/index";
 import { Category } from "../../src/entities/Category";
 
@@ -6,7 +6,7 @@ describe("CategoryAccess -", () => {
   let dal: DAL = null;
   let config: AppConfig = null;
   beforeAll(() => {
-    config = getConfig();
+    config = getConfig(process.env.NODE_ENV);
     dal = new DAL(config, console);
   });
   afterAll(async () => {
