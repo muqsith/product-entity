@@ -1,24 +1,16 @@
 import express from "express";
 import { graphqlHTTP } from "express-graphql";
-import { buildSchema } from "graphql";
 
-export const getGraphQLController = () => {
-  const schema = buildSchema(`
-        type Query {
-            hello: String
-        }
-    `);
+import { DAL } from "../../dal";
+import { schema } from "./schema";
 
-  const root = {
-    hello: () => "Hello World!",
-  };
-
+export const getGraphQLController = (dal: DAL) => {
   const app = express();
   app.use(
     "/",
     graphqlHTTP({
+      context: dal,
       schema,
-      rootValue: root,
       graphiql: true,
     })
   );

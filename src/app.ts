@@ -32,7 +32,7 @@ export const getApp = async () => {
   app.use("/api/docs", getSwaggerController());
 
   // graphql api
-  app.use("/api/gql", getGraphQLController());
+  app.use("/api/gql", getGraphQLController(dal));
 
   app.use(errorHandler);
 
