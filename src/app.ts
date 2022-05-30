@@ -4,6 +4,7 @@ import { getConfig } from "./config";
 import { DAL } from "./dal";
 import { getLogger } from "./logger";
 import { getControllers } from "./controllers/rest";
+import { errorHandler } from "./errorHandler";
 
 export const getApp = () => {
   const config = getConfig(process.env.NODE_ENV);
@@ -19,12 +20,7 @@ export const getApp = () => {
 
   app.use("/api/rest", getControllers(dal));
 
-  app.use((err, req: Request, res: Response, next: NextFunction) => {
-    if (err?.statusCode) {
-      return res.status(err.statusCode).send(err.message);
-    }
-    return res.status(500).send(err);
-  });
+  app.use(errorHandler);
 
   return app;
 };
