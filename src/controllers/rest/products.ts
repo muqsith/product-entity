@@ -177,10 +177,33 @@ export const getProductsController = (dal: DAL): Router => {
       return next(createHttpError(400, validationError.message));
     }
 
-    const product = productRequestModel.getProduct();
+    const newProduct = productRequestModel.getProduct();
+
+    const existingProduct = await dal.productAccess.getProduct(newProduct.id);
+    if (newProduct.name) {
+      existingProduct.name = newProduct.name;
+    }
+    if (newProduct.categoryId) {
+      existingProduct.categoryId = newProduct.categoryId;
+    }
+    if (newProduct.status) {
+      try {
+        existingProduct.transformStatus(newProduct.status);
+      } catch (productTransitionError: any) {
+        return next(createHttpError(400, productTransitionError.message));
+      }
+    }
+    if (!isNaN(newProduct.price) && newProduct.price !== null) {
+      existingProduct.price = newProduct.price;
+    }
+    if (newProduct.description) {
+      existingProduct.description = newProduct.description;
+    }
 
     // update product
-    const updatedProduct = await dal.productAccess.updateProduct(product);
+    const updatedProduct = await dal.productAccess.updateProduct(
+      existingProduct
+    );
 
     // handle images
     const productImages = productRequestModel.getProductImages();

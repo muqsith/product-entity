@@ -114,11 +114,6 @@ export class ProductRequestModel {
       throw new Error(`Product with id :${this.id} not found`);
     }
 
-    // validate if the status can be transformed to new status
-    if (this.status !== savedProduct.status) {
-      savedProduct.transformStatus(this.status);
-    }
-
     const category = await dal.categoryAccess.getCategory(this.categoryId);
     if (!category) {
       throw new Error(`Category with id: ${this.categoryId} does not exist`);
