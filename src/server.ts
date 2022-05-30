@@ -1,16 +1,18 @@
 import { getApp } from "./app";
 
-/**
- * Start Express server.
- */
-const app = getApp();
-const server = app.listen(app.get("port"), () => {
-  console.log(
-    "  App is running at http://localhost:%d in %s mode",
-    app.get("port"),
-    app.get("env")
-  );
-  console.log("  Press CTRL-C to stop\n");
-});
+const startServer = async () => {
+  /**
+   * Start Express server.
+   */
+  const app = await getApp();
+  const server = app.listen(app.get("port"), () => {
+    console.log(
+      "  App is running at http://localhost:%d in %s mode",
+      app.get("port"),
+      app.get("env")
+    );
+    console.log("  Press CTRL-C to stop\n");
+  });
+};
 
-export default server;
+startServer();

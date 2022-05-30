@@ -74,7 +74,7 @@ export class ProductRequestModel {
     }
   }
 
-  validateCreate() {
+  async validateCreate(dal: DAL) {
     const validationResult = productCreateValidationSchema.validate({
       name: this.name,
       price: this.price,
@@ -83,6 +83,10 @@ export class ProductRequestModel {
     if (validationResult.error) {
       const errorMessage = validationResult.error.message;
       throw new Error(errorMessage);
+    }
+    const category = await dal.categoryAccess.getCategory(this.categoryId);
+    if (!category) {
+      throw new Error(`Category with id: ${this.categoryId} does not exist`);
     }
     if (this.images.length > 0) {
       this.images.forEach((image) => image.validate());
@@ -113,6 +117,11 @@ export class ProductRequestModel {
     // validate if the status can be transformed to new status
     if (this.status !== savedProduct.status) {
       savedProduct.transformStatus(this.status);
+    }
+
+    const category = await dal.categoryAccess.getCategory(this.categoryId);
+    if (!category) {
+      throw new Error(`Category with id: ${this.categoryId} does not exist`);
     }
 
     if (this.images.length > 0) {

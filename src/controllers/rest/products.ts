@@ -107,7 +107,7 @@ export const getProductsController = (dal: DAL): Router => {
 
     const productRequestModel = new ProductRequestModel(productData);
     try {
-      productRequestModel.validateCreate();
+      await productRequestModel.validateCreate(dal);
     } catch (validationError: any) {
       return next(createHttpError(400, validationError.message));
     }
