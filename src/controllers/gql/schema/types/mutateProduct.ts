@@ -3,7 +3,10 @@ import {
   GraphQLNonNull,
   GraphQLString,
   GraphQLFloat,
+  GraphQLList,
 } from "graphql";
+
+import { newProductImage } from "./newProductImage";
 
 export const mutateProduct = new GraphQLInputObjectType({
   name: "UpdateProduct",
@@ -25,6 +28,9 @@ export const mutateProduct = new GraphQLInputObjectType({
     },
     description: {
       type: GraphQLString,
+    },
+    images: {
+      type: new GraphQLList(newProductImage),
     },
   },
 });

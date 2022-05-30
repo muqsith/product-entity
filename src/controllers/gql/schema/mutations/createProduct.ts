@@ -12,10 +12,21 @@ export const createProduct = {
     },
   },
   resolve: async (_, { input }, context: DAL) => {
-    const { name, categoryId, status, price, description } = input;
+    const { name, categoryId, status, price, description, images } = input;
     const savedProduct = await context.productAccess.addProduct(
       new Product({ name, categoryId, status, price, description })
     );
+    const responseObject: any = { ...savedProduct };
+    // add images
+    if (Array.isArray(images) && images.length > 0) {
+      const savedImages = await context.productImageAccess.addProductImages(
+        images.map((image) => {
+          image.productId = savedProduct.id;
+          return image;
+        })
+      );
+      responseObject.images = savedImages;
+    }
     return savedProduct;
   },
 };

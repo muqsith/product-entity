@@ -1,4 +1,10 @@
-import { GraphQLObjectType, GraphQLString, GraphQLFloat } from "graphql";
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLFloat,
+  GraphQLList,
+} from "graphql";
+import { productImageType } from "./ProductImage";
 
 export const productType = new GraphQLObjectType({
   name: "Product",
@@ -20,6 +26,9 @@ export const productType = new GraphQLObjectType({
     },
     description: {
       type: GraphQLString,
+    },
+    images: {
+      type: new GraphQLList(productImageType),
     },
   },
 });

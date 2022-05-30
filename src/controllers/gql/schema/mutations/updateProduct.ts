@@ -1,6 +1,5 @@
 import { GraphQLNonNull } from "graphql";
 import { DAL } from "../../../../dal";
-import { Product } from "../../../../entities/Product";
 import { productType } from "../types/Product";
 import { mutateProduct } from "../types/mutateProduct";
 
@@ -12,8 +11,8 @@ export const updateProduct = {
     },
   },
   resolve: async (_, { input }, context: DAL) => {
-    let result: Product = null;
-    const { id, name, categoryId, status, price, description } = input;
+    let responseObject: any = null;
+    const { id, name, categoryId, status, price, description, images } = input;
     const existingProduct = await context.productAccess.getProduct(id);
     if (existingProduct) {
       if (name) {
@@ -31,8 +30,21 @@ export const updateProduct = {
       if (description) {
         existingProduct.description = description;
       }
-      result = await context.productAccess.updateProduct(existingProduct);
+      const updateResult = await context.productAccess.updateProduct(
+        existingProduct
+      );
+      responseObject = { ...updateProduct };
+      // add images
+      if (Array.isArray(images) && images.length > 0) {
+        const savedImages = await context.productImageAccess.addProductImages(
+          images.map((image) => {
+            image.productId = updateResult.id;
+            return image;
+          })
+        );
+        responseObject.images = savedImages;
+      }
     }
-    return result;
+    return responseObject;
   },
 };

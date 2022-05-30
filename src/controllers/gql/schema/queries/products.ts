@@ -1,6 +1,5 @@
 import { GraphQLList, GraphQLString } from "graphql";
 import { DAL } from "../../../../dal";
-import { Product } from "../../../../entities/Product";
 
 import { productType } from "../types/Product";
 
@@ -14,20 +13,33 @@ export const products = {
   },
   resolve: async (_, args: any, context: DAL) => {
     const status = args?.status;
-
+    let result: Array<any> = [];
     const savedProducts = status
       ? await context.productAccess.getProductsByStatus(status)
       : await context.productAccess.getProducts();
-    const result = savedProducts.map((product: Product) => {
-      return {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        status: product.status,
-        categoryId: product.categoryId,
-        description: product.description,
+    for (const savedProduct of savedProducts) {
+      const productId = savedProduct.id;
+      const productImages = await context.productImageAccess.getProductImages(
+        productId
+      );
+      const product = {
+        id: savedProduct.id,
+        name: savedProduct.name,
+        price: savedProduct.price,
+        status: savedProduct.status,
+        categoryId: savedProduct.categoryId,
+        description: savedProduct.description,
+        images: productImages.map((productImage) => {
+          return {
+            id: productImage.id,
+            url: productImage.url,
+            main: productImage.main,
+            archived: productImage.archived,
+          };
+        }),
       };
-    });
+      result.push(product);
+    }
     return result;
   },
 };

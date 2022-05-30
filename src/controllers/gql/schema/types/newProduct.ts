@@ -3,7 +3,10 @@ import {
   GraphQLNonNull,
   GraphQLString,
   GraphQLFloat,
+  GraphQLList,
 } from "graphql";
+
+import { newProductImage } from "./newProductImage";
 
 export const newProduct = new GraphQLInputObjectType({
   name: "NewProduct",
@@ -22,6 +25,9 @@ export const newProduct = new GraphQLInputObjectType({
     },
     description: {
       type: GraphQLString,
+    },
+    images: {
+      type: new GraphQLList(newProductImage),
     },
   },
 });
