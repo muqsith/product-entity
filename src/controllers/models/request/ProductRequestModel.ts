@@ -1,26 +1,19 @@
 import Joi from "joi";
 import { STATUSES } from "../../../constants/Product";
+import { DAL } from "../../../dal";
 import { Product } from "../../../entities/Product";
 import { ProductImage } from "../../../entities/ProductImage";
 import { ProductImageRequestModel } from "./ProductImageRequestModel";
 
 const baseValidationSchema = {
-  name: Joi.string().alphanum().min(3).max(300).required(),
+  name: Joi.string().min(3).max(500).required(),
   price: Joi.number().min(0).max(100000).required(),
-  categoryId: Joi.string()
-    .guid({
-      version: ["uuidv4"],
-    })
-    .required(),
+  categoryId: Joi.string().uuid().required(),
 };
-const productCreateValidationSchema = Joi.object(baseValidationSchema);
+const productCreateValidationSchema = Joi.object({ ...baseValidationSchema });
 const productUpdateValidationSchema = Joi.object({
   ...baseValidationSchema,
-  id: Joi.string()
-    .guid({
-      version: ["uuidv4"],
-    })
-    .required(),
+  id: Joi.string().uuid().required(),
 });
 
 export class ProductRequestModel {
@@ -48,7 +41,15 @@ export class ProductRequestModel {
   }
 
   validateCreate() {
-    productCreateValidationSchema.validate(this);
+    const validationResult = productCreateValidationSchema.validate({
+      name: this.name,
+      price: this.price,
+      categoryId: this.categoryId,
+    });
+    if (validationResult.error) {
+      const errorMessage = validationResult.error.message;
+      throw new Error(errorMessage);
+    }
     if (this.images.length > 0) {
       this.images.forEach((image) => image.validate());
       const hasOneMainImage = this.images.some((image) => Boolean(image.main));
@@ -58,8 +59,28 @@ export class ProductRequestModel {
     }
   }
 
-  validateUpdate() {
-    productUpdateValidationSchema.validate(this);
+  async validateUpdate(dal: DAL) {
+    const validationResult = productUpdateValidationSchema.validate({
+      id: this.id,
+      name: this.name,
+      price: this.price,
+      categoryId: this.categoryId,
+    });
+    if (validationResult.error) {
+      const errorMessage = validationResult.error.message;
+      throw new Error(errorMessage);
+    }
+
+    const savedProduct = await dal.productAccess.getProduct(this.id);
+    if (!savedProduct) {
+      throw new Error(`Product with id :${this.id} not found`);
+    }
+
+    // validate if the status can be transformed to new status
+    if (this.status !== savedProduct.status) {
+      savedProduct.transformStatus(this.status);
+    }
+
     if (this.images.length > 0) {
       this.images.forEach((image) => image.validate());
       const hasOneMainImage = this.images.some((image) => Boolean(image.main));

@@ -11,7 +11,7 @@ export class ProductImageAccess {
   }
 
   async getProductImages(productId): Promise<Array<ProductImage>> {
-    let result = null;
+    let result = [];
     const selectQuery = {
       text: "SELECT * FROM product_images WHERE productid = $1",
       values: [productId],

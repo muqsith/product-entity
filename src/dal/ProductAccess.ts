@@ -17,6 +17,7 @@ export class ProductAccess {
       values: [],
     };
     const queryResult = await this.dbConnection.executeQuery(selectQuery);
+
     if (queryResult.rowCount > 0) {
       result = queryResult.rows.map((row) => new Product(row));
     }

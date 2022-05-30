@@ -1,16 +1,16 @@
 CREATE TABLE categories (
     id uuid DEFAULT uuid_generate_v4 (),
     parentid uuid, -- null for a root category
-    name VARCHAR NOT NULL,
+    name TEXT NOT NULL,
     status VARCHAR DEFAULT 'ACTIVE',
     PRIMARY KEY (id)
 );
 
 CREATE TABLE products (
     id uuid DEFAULT uuid_generate_v4 (),
-    name VARCHAR NOT NULL,
+    name TEXT NOT NULL,
     price NUMERIC(5, 2),
-    description VARCHAR,
+    description TEXT,
     categoryid uuid NOT NULL,
     status VARCHAR NOT NULL,
     FOREIGN KEY (categoryid) REFERENCES categories (id),

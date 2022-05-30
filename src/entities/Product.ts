@@ -2,6 +2,15 @@ import { normalizeInput } from "../utils";
 import { ProductTransitionError } from "../errors/ProductTransitionError";
 import { TRANSITIONS } from "../constants/Product";
 
+const isStatusTransitionAllowed = (fromStatus, toStatus): boolean => {
+  let result = false;
+  const availableToStatuses = TRANSITIONS.filter(
+    (transition) => transition.from === fromStatus
+  ).map((transition) => transition.to);
+  result = availableToStatuses.indexOf(toStatus) !== -1;
+  return result;
+};
+
 export class Product {
   // properties
   id: string;
@@ -21,30 +30,20 @@ export class Product {
     this.status = normalizedData.status;
   }
 
-  isStatusTransitionAllowed(toStatus): boolean {
-    let result = false;
-    const availableToStatuses = TRANSITIONS.filter(
-      (transition) => transition.from === this.status
-    ).map((transition) => transition.to);
-    result = availableToStatuses.indexOf(toStatus) !== -1;
-    return result;
-  }
-
-  transformStatus(toStatus) {
-    const isTransitionAllowed = this.isStatusTransitionAllowed(toStatus);
+  transformStatus(newStatus) {
+    const isTransitionAllowed = isStatusTransitionAllowed(
+      this.status,
+      newStatus
+    );
     if (!isTransitionAllowed) {
       throw new ProductTransitionError(
         this.id,
         this.name,
         this.status,
-        toStatus
+        newStatus
       );
     } else {
-      this.status = toStatus;
+      this.status = newStatus;
     }
-  }
-
-  setStatus(newStatus) {
-    this.transformStatus(newStatus);
   }
 }

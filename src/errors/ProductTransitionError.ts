@@ -7,6 +7,6 @@ export class ProductTransitionError extends Error {
     ...params
   ) {
     super(...params);
-    this.message = `Product ${productName} (id: ${productId}) with status ${fromStatus} cannot be set to ${toStatus}`;
+    this.message = `Product: ${productName} (id: ${productId}) with status ${fromStatus} cannot be set to ${toStatus}`;
   }
 }

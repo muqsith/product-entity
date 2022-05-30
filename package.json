@@ -6,9 +6,11 @@
   "types": "./src/index.d.ts",
   "scripts": {
     "test": "export NODE_ENV=test && npm run test-setup; jest",
-    "start": "export NODE_ENV=development && npm run development-setup && npm run server-build && node dist/server.js",
-    "server-build": "./node_modules/.bin/rimraf dist && npm run tsc;",
+    "start": "export NODE_ENV=development && npm run development-setup && npm run server-build && npm-run-all --parallel tsc-watch server-watch",
+    "tsc-watch": "./node_modules/.bin/tsc -w",
     "tsc": "./node_modules/.bin/tsc",
+    "server-watch": "./node_modules/.bin/nodemon dist/server.js",
+    "server-build": "./node_modules/.bin/rimraf dist && npm run tsc;",
     "development-setup": "node scripts/db.js -u product_dev -p 123456 -d product_entity -c postgresql://admin:admin@localhost:5432",
     "test-setup": "node scripts/db.js -u product_test -p 123456 -d test_product_entity -c postgresql://admin:admin@localhost:5432"
   },
@@ -34,6 +36,8 @@
     "commander": "^9.3.0",
     "fs-extra": "^10.1.0",
     "jest": "^28.1.0",
+    "nodemon": "^2.0.16",
+    "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.3",
     "typescript": "^4.7.2"

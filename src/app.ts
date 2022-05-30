@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 
 import { getConfig } from "./config";
 import { DAL } from "./dal";
@@ -18,6 +18,13 @@ export const getApp = () => {
   app.use(express.json());
 
   app.use("/api/rest", getControllers(dal));
+
+  app.use((err, req: Request, res: Response, next: NextFunction) => {
+    if (err?.statusCode) {
+      return res.status(err.statusCode).send(err.message);
+    }
+    return res.status(500).send(err);
+  });
 
   return app;
 };

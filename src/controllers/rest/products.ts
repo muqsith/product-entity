@@ -10,10 +10,17 @@ import { ProductImageResponseModel } from "../models/response/ProductImageRespon
 export const getProductsController = (dal: DAL): Router => {
   const router = express.Router();
 
-  const getProductResponseModel = async (products: Array<Product>) => {
+  router.get("/", async (req: Request, res: Response, next: NextFunction) => {
+    const status = req.query.status ? String(req.query.status) : undefined;
+    const products: Array<Product> = status
+      ? await dal.productAccess.getProductsByStatus(status)
+      : await dal.productAccess.getProducts();
+
+    // construct response
     const productsResponse: Array<ProductResponseModel> = [];
     for (const product of products) {
       const productResponse = new ProductResponseModel(product);
+      // fetch images
       const productImages = await dal.productImageAccess.getProductImages(
         product.id
       );
@@ -22,38 +29,24 @@ export const getProductsController = (dal: DAL): Router => {
           (productImage) => new ProductImageResponseModel(productImage)
         );
       productResponse.images = productImagesResponse;
+      productsResponse.push(productResponse);
     }
-    return productsResponse;
-  };
-
-  router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-    const products: Array<Product> = await dal.productAccess.getProducts();
-    const productsResponse = await getProductResponseModel(products);
     return res.status(200).send(productsResponse);
   });
 
-  router.get(
-    "/:status",
-    async (req: Request, res: Response, next: NextFunction) => {
-      const status = req.params.status;
-      const products: Array<Product> =
-        await dal.productAccess.getProductsByStatus(status);
-      const productsResponse = await getProductResponseModel(products);
-      return res.status(200).send(productsResponse);
-    }
-  );
-
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
-    const productData = req?.body?.product;
+    const productData = req.body;
 
     const productRequestModel = new ProductRequestModel(productData);
     try {
       productRequestModel.validateCreate();
-    } catch (validationError) {
-      return next(createHttpError(400, validationError));
+    } catch (validationError: any) {
+      return next(createHttpError(400, validationError.message));
     }
 
     const newProduct = productRequestModel.getNewProduct();
+
+    // create product
     const savedProduct = await dal.productAccess.addProduct(newProduct);
 
     // handle images
@@ -75,30 +68,17 @@ export const getProductsController = (dal: DAL): Router => {
   });
 
   router.put("/", async (req: Request, res: Response, next: NextFunction) => {
-    const productData = req?.body?.product;
+    const productData = req.body;
     const productRequestModel = new ProductRequestModel(productData);
     try {
-      productRequestModel.validateUpdate();
-    } catch (validationError) {
-      return next(createHttpError(400, validationError));
+      await productRequestModel.validateUpdate(dal);
+    } catch (validationError: any) {
+      return next(createHttpError(400, validationError.message));
     }
 
     const product = productRequestModel.getProduct();
-    const toStatus = product.status;
-    const savedProduct = await dal.productAccess.getProduct(product.id);
-    const fromStatus = savedProduct.status;
-    try {
-      if (toStatus !== fromStatus) {
-        // set product to current status
-        product.status = fromStatus;
-        // initiate status change
-        product.setStatus(toStatus);
-      }
-    } catch (statusChangeError) {
-      return next(createHttpError(400, statusChangeError));
-    }
 
-    // update product if status change is successful
+    // update product
     const updatedProduct = await dal.productAccess.updateProduct(product);
 
     // handle images

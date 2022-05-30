@@ -1,12 +1,8 @@
 import Joi from "joi";
 
 const productImageValidationSchema = Joi.object({
-  url: Joi.number().min(0).max(1000000).required(),
-  productId: Joi.string()
-    .guid({
-      version: ["uuidv4"],
-    })
-    .required(),
+  url: Joi.string().uri(),
+  productId: Joi.string().uuid().required(),
 });
 
 export class ProductImageRequestModel {
