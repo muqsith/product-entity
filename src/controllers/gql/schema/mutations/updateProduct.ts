@@ -12,7 +12,7 @@ export const updateProduct = {
     },
   },
   resolve: async (_, { input }, context: DAL) => {
-    let result = null;
+    let result: Product = null;
     const { id, name, categoryId, status, price, description } = input;
     const existingProduct = await context.productAccess.getProduct(id);
     if (existingProduct) {

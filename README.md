@@ -1,6 +1,6 @@
 # Product Entity
 
-REST API for categories and products.
+GraphQL and REST API for categories and products.
 
 ### Pre-requisites
 
@@ -28,3 +28,6 @@ REST API documentation can be accessed on local at http://localhost:8080/api/doc
 
 REST API end point example: http://localhost:8080/api/rest/products
 
+### GraphQL API
+
+GraphQL API end point on local is available at http://localhost:8080/api/gql, this also opens interactive browser based GraphQL client.
