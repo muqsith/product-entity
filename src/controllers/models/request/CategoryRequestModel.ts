@@ -4,9 +4,28 @@ import { Category } from "../../../entities/Category";
 
 const categoryValidationSchema = Joi.object({
   name: Joi.string().min(3).max(500).required(),
-  parentId: Joi.string().uuid()
+  parentId: Joi.string().uuid(),
 });
 
+/**
+ * @openapi
+ * "components": {
+ *    "schemas": {
+ *        "CategoryRequestModel": {
+ *            "type": "object",
+ *            "properties": {
+ *                 "name": {
+ *                    "type": "string",
+ *                    "required": true
+ *                 },
+ *                  "parentId": {
+ *                     "type": "string"
+ *                  }
+ *             }
+ *        }
+ *    }
+ * }
+ */
 export class CategoryRequestModel {
   name: string;
   parentId: string;

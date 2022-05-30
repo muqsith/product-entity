@@ -16,6 +16,40 @@ const productUpdateValidationSchema = Joi.object({
   id: Joi.string().uuid().required(),
 });
 
+/**
+ * @openapi
+ * "components": {
+ *    "schemas": {
+ *        "ProductRequestModel": {
+ *            "type": "object",
+ *            "properties": {
+ *                 "name": {
+ *                    "type": "string",
+ *                    "required": true
+ *                 },
+ *                 "price": {
+ *                     "type": "number",
+ *                      "required": true
+ *                  },
+ *                  "description": {
+ *                     "type": "string"
+ *                  },
+ *                  "categoryId": {
+ *                      "type": "string",
+ *                      "required": true
+ *                  },
+ *                  "status": {
+ *                      "type": "string"
+ *                  },
+ *                  "images": {
+ *                      "type": "array",
+ *                      "$ref": "#/components/schemas/ProductImageRequestModel"
+ *                  }
+ *             }
+ *        }
+ *    }
+ * }
+ */
 export class ProductRequestModel {
   id: string;
   name: string;

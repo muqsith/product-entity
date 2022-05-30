@@ -10,6 +10,41 @@ import { ProductImageResponseModel } from "../models/response/ProductImageRespon
 export const getProductsController = (dal: DAL): Router => {
   const router = express.Router();
 
+  /**
+   * @openapi
+   * "/api/rest/products": {
+   *        "get": {
+   *          "summary": "Returns a list of products",
+   *          "description": "End point to fetch list of products",
+   *          "tags": ["PRODUCT"],
+   *          "parameters": [{
+   *              "in": "query",
+   *              "description": "Product status",
+   *              "name": "status",
+   *              "schema": {
+   *                "type": "string",
+   *                "default": "DRAFT",
+   *                "enum": ["DRAFT", "AVAILABLE", "EXPIRED", "DELETED", "DRAFT_DELETED", "RESERVED", "SOLD", "RETURNED"]
+   *              }
+   *          }],
+   *          "responses": {
+   *            "200": {
+   *               "description": "Product response object",
+   *               "content": {
+   *                  "application/json": {
+   *                     "schema": {
+   *                         "type": "array",
+   *                          "items": {
+   *                              "$ref": "#/components/schemas/ProductResponseModel"
+   *                          }
+   *                      }
+   *                   }
+   *                }
+   *            }
+   *          }
+   *        }
+   *      }
+   */
   router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     const status = req.query.status ? String(req.query.status) : undefined;
     const products: Array<Product> = status
@@ -34,6 +69,39 @@ export const getProductsController = (dal: DAL): Router => {
     return res.status(200).send(productsResponse);
   });
 
+  /**
+   * @openapi
+   * "/api/rest/products": {
+   *        "post": {
+   *          "summary": "Create a new product",
+   *          "description": "End point to create a new product",
+   *          "tags": ["PRODUCT"],
+   *          "requestBody": {
+   *             "description": "Create product request body",
+   *             "required": true,
+   *             "content": {
+   *                "application/json": {
+   *                    "schema": {
+   *                      "$ref": "#/components/schemas/ProductRequestModel"
+   *                    }
+   *                 }
+   *              }
+   *          },
+   *          "responses": {
+   *            "200": {
+   *               "description": "Product response object",
+   *               "content": {
+   *                  "application/json": {
+   *                     "schema": {
+   *                         "$ref": "#/components/schemas/ProductResponseModel"
+   *                      }
+   *                   }
+   *                }
+   *            }
+   *          }
+   *        }
+   *      }
+   */
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     const productData = req.body;
 
@@ -67,6 +135,39 @@ export const getProductsController = (dal: DAL): Router => {
     return res.status(200).send(productResponseModel);
   });
 
+  /**
+   * @openapi
+   * "/api/rest/products": {
+   *        "put": {
+   *          "summary": "Update an existing product",
+   *          "description": "End point to update and existing product",
+   *          "tags": ["PRODUCT"],
+   *          "requestBody": {
+   *             "description": "Update product request body",
+   *             "required": true,
+   *             "content": {
+   *                "application/json": {
+   *                    "schema": {
+   *                      "$ref": "#/components/schemas/ProductRequestModel"
+   *                    }
+   *                 }
+   *              }
+   *          },
+   *          "responses": {
+   *            "200": {
+   *               "description": "Product response object",
+   *               "content": {
+   *                  "application/json": {
+   *                     "schema": {
+   *                         "$ref": "#/components/schemas/ProductResponseModel"
+   *                      }
+   *                   }
+   *                }
+   *            }
+   *          }
+   *        }
+   *      }
+   */
   router.put("/", async (req: Request, res: Response, next: NextFunction) => {
     const productData = req.body;
     const productRequestModel = new ProductRequestModel(productData);

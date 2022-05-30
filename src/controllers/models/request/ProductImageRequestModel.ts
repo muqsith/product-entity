@@ -5,6 +5,29 @@ const productImageValidationSchema = Joi.object({
   productId: Joi.string().uuid().required(),
 });
 
+/**
+ * @openapi
+ * "components": {
+ *    "schemas": {
+ *        "ProductImageRequestModel": {
+ *            "type": "object",
+ *            "properties": {
+ *                 "url": {
+ *                    "type": "string",
+ *                    "required": true
+ *                 },
+ *                  "main": {
+ *                     "type": "boolean"
+ *                  },
+ *                  "productId": {
+ *                      "type": "string",
+ *                      "required": true
+ *                  }
+ *             }
+ *        }
+ *    }
+ * }
+ */
 export class ProductImageRequestModel {
   id: string;
   productId: string;

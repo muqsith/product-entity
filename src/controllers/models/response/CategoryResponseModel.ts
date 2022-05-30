@@ -1,5 +1,29 @@
 import { Category } from "../../../entities/Category";
 
+/**
+ * @openapi
+ * "components": {
+ *    "schemas": {
+ *        "CategoryResponseModel": {
+ *            "type": "object",
+ *            "properties": {
+ *                 "id": {
+ *                    "type": "string"
+ *                 },
+ *                 "name": {
+ *                    "type": "string"
+ *                 },
+ *                  "parentId": {
+ *                     "type": "string"
+ *                  },
+ *                  "status": {
+ *                     "type": "string"
+ *                  }
+ *             }
+ *        }
+ *    }
+ * }
+ */
 export class CategoryResponseModel {
   id: string;
   parentId: string;

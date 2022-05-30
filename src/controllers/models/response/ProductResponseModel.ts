@@ -1,6 +1,40 @@
 import { Product } from "../../../entities/Product";
 import { ProductImageResponseModel } from "./ProductImageResponseModel";
 
+/**
+ * @openapi
+ * "components": {
+ *    "schemas": {
+ *        "ProductResponseModel": {
+ *            "type": "object",
+ *            "properties": {
+ *                "id": {
+ *                    "type": "string"
+ *                 },
+ *                 "name": {
+ *                    "type": "string"
+ *                 },
+ *                 "price": {
+ *                     "type": "number"
+ *                  },
+ *                  "description": {
+ *                     "type": "string"
+ *                  },
+ *                  "categoryId": {
+ *                      "type": "string"
+ *                  },
+ *                  "status": {
+ *                      "type": "string"
+ *                  },
+ *                  "images": {
+ *                      "type": "array",
+ *                      "$ref": "#/components/schemas/ProductImageResponseModel"
+ *                  }
+ *             }
+ *        }
+ *    }
+ * }
+ */
 export class ProductResponseModel {
   id: string;
   name: string;
